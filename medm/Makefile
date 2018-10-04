@@ -12,6 +12,14 @@
 TOP = ../../..
 include $(TOP)/configure/CONFIG
 
+# Install for Debian
+ifeq ($(shell expr "$(LINUX_DISTRO)" : 'Debian[89]'),7)
+build: /usr/include/Xm/XmP.h
+
+/usr/include/Xm/XmP.h:
+	sudo apt-get install -y x11proto-print-dev libmotif-dev xfonts-100dpi libxp-dev libxmu-dev libxpm-dev
+endif
+
 # Motif
 USE_MOTIF12=NO
 #USE_MOTIF12=YES
