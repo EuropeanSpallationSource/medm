@@ -17,7 +17,18 @@ elif [ -r /etc/os-release ] ; then
   eval $(grep "^VERSION_ID=" /etc/os-release)
   tmpdist=$ID$VERSION_ID
 else
-  tmpdist=Unknown
+  uname_s=$(uname -s)
+  case "$uname_s" in
+    Darwin)
+		tmpdist=Darwin
+		if type port; then
+			tmpdist=Darwin-macports
+		fi
+    ;;
+    *)
+    tmpdist=Unknown
+    ;;
+  esac
 fi
 
 case "$tmpdist" in
@@ -36,8 +47,10 @@ case "$tmpdist" in
   Raspbian*9*)
     linuxdistro=Raspbian9
     ;;
+	Darwin-macports)
+		;;
   *)
-    echo >&2 "Unsupported platform"
+    echo >&2 "Unsupported platform: $tmpdist"
     exit 1
     ;;
 esac
@@ -66,6 +79,11 @@ case "$linuxdistro" in
     echo $cmd
     eval $cmd
     ;;
+  Darwin-macports)
+    if ! test -e /opt/local//include/X11/Intrinsic.h; then
+			 sudo port install openmotif
+	  fi
+	  ;;
   *)
 esac
 
