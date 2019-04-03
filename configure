@@ -41,6 +41,9 @@ case "$tmpdist" in
   Debian*9*)
     linuxdistro=Debian9
     ;;
+	Debianbuster*)
+    linuxdistro=Debian10
+    ;;
   Raspbian*8*)
     linuxdistro=Raspbian8
     ;;
@@ -70,6 +73,16 @@ case "$linuxdistro" in
     eval $cmd
     ;;
   Debian[89])
+    if ! test -e /usr/include/Xm/XmP.h; then
+      cmd="sudo apt-get install -y libmotif-dev x11proto-print-dev xfonts-100dpi libxmu-dev libxpm-dev"
+      echo $cmd
+      eval $cmd
+    fi
+    cmd="echo USR_LIBS_Linux = Xm Xt Xmu X11 Xext >medm/config.mak"
+    echo $cmd
+    eval $cmd
+    ;;
+  Debian10)
     if ! test -e /usr/include/Xm/XmP.h; then
       cmd="sudo apt-get install -y libmotif-dev x11proto-print-dev xfonts-100dpi libxmu-dev libxpm-dev"
       echo $cmd
