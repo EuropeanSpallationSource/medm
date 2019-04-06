@@ -20,10 +20,10 @@ else
   uname_s=$(uname -s)
   case "$uname_s" in
     Darwin)
-		tmpdist=Darwin
-		if type port; then
-			tmpdist=Darwin-macports
-		fi
+    tmpdist=Darwin
+    if type port; then
+      tmpdist=Darwin-macports
+    fi
     ;;
     *)
     tmpdist=Unknown
@@ -41,7 +41,7 @@ case "$tmpdist" in
   Debian*9*)
     linuxdistro=Debian9
     ;;
-	Debianbuster*)
+  Debianbuster*)
     linuxdistro=Debian10
     ;;
   Raspbian*8*)
@@ -50,8 +50,8 @@ case "$tmpdist" in
   Raspbian*9*)
     linuxdistro=Raspbian9
     ;;
-	Darwin-macports)
-		;;
+  Darwin-macports)
+    ;;
   *)
     echo >&2 "Unsupported platform: $tmpdist"
     exit 1
@@ -91,24 +91,25 @@ case "$linuxdistro" in
     cmd="echo USR_LIBS_Linux = Xm Xt Xmu X11 Xext >medm/config.mak"
     echo $cmd
     eval $cmd
+
+    FILE=../../configure/os/CONFIG_SITE.$EPICS_HOST_ARCH.$EPICS_HOST_ARCH
+    LINE="X11_LIB=/usr/lib/x86_64-linux-gnu/"
+    if ! grep -q "^$LINE" $FILE; then
+        cmd="echo $LINE >>$FILE"
+        echo $cmd
+        eval $cmd
+    fi
+    LINE="MOTIF_LIB=/usr/lib/x86_64-linux-gnu/"
+    if ! grep -q "^$LINE" $FILE; then
+        cmd="echo $LINE >>$FILE"
+        echo $cmd
+        eval $cmd
+    fi
     ;;
   Darwin-macports)
     if ! test -e /opt/local//include/X11/Intrinsic.h; then
-			 sudo port install openmotif
-	  fi
-	  ;;
+       sudo port install openmotif
+    fi
+    ;;
   *)
 esac
-
-
-
-
-
-
-# Install for Raspbian
-#ifeq ($(shell expr "$(LINUX_DISTRO)" : 'Raspbian[89]'),9)
-#build: /usr/include/Xm/XmP.h
-
-#/usr/include/Xm/XmP.h:
-#       sudo apt-get install -y x11proto-print-dev libmotif-dev xfonts-100dpi libxp-dev libxmu-dev libxpm-dev
-#endif
