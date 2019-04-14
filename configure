@@ -50,6 +50,9 @@ case "$tmpdist" in
   Raspbian*9*)
     linuxdistro=Raspbian9
     ;;
+  Ubuntuxenial*)
+    linuxdistro=Ubuntuxenial
+    ;;
   Darwin-macports)
     ;;
   *)
@@ -82,7 +85,7 @@ case "$linuxdistro" in
     echo $cmd
     eval $cmd
     ;;
-  Debian10)
+  Debian10|Ubuntuxenial)
     if ! test -e /usr/include/Xm/XmP.h; then
       cmd="sudo apt-get install -y libmotif-dev x11proto-print-dev xfonts-100dpi libxmu-dev libxpm-dev"
       echo $cmd
